@@ -1,13 +1,14 @@
-.img {
-  display: block;
+.imageCard {
   height: 100%;
-  width: 100%;
-  object-fit: fill;
 }
 
-.div {
-  width: 250px;
-  height: 250px;
-  overflow: hidden;
-  object-fit: contain;
+.image {
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.image:hover {
+  transform: scale(1.1);
 }

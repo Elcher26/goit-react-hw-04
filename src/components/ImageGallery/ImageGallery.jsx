@@ -1,20 +1,22 @@
-/* eslint-disable react/prop-types */
-import css from './ImageGallery.module.css';
+import PropTypes from 'prop-types';
 import ImageCard from '../ImageCard/ImageCard';
-function ImageGallery({ images, setImageUrl, openModal }) {
+import css from './ImageGallery.module.css';
+
+const ImageGallery = ({ images, openModal }) => {
   return (
-    <ul className={css.ul}>
+    <ul className={css.imageGallery}>
       {images.map(image => (
-        <li key={image.id} className={css.li}>
-          <ImageCard
-            image={image}
-            setImageUrl={setImageUrl}
-            openModal={openModal}
-          />
+        <li key={image.id} className={css.imageGalleryItem}>
+          <ImageCard imageInfo={image} onClick={() => openModal(image)} />
         </li>
       ))}
     </ul>
   );
-}
+};
+
+ImageGallery.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.object),
+  openModal: PropTypes.func.isRequired,
+};
 
 export default ImageGallery;

@@ -1,25 +1,34 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import css from './ImageCard.module.css';
 
-function ImageCard({ image, setImageUrl, openModal }) {
-  function handleClick() {
-    setImageUrl({
-      url: image.urls.full,
-      alt: image.alt_description,
-    });
-    openModal();
-  }
-
+const ImageCard = ({
+  imageInfo: {
+    alt_description,
+    urls: { small },
+  },
+  onClick,
+}) => {
   return (
-    <div className={css.div} onClick={handleClick}>
+    <div className={css.imageCard}>
       <img
-        className={css.img}
-        src={image.urls.small}
-        alt={image.alt_description}
+        onClick={onClick}
+        className={css.image}
+        src={small}
+        alt={alt_description}
+        width="360"
       />
     </div>
   );
-}
+};
+
+ImageCard.propTypes = {
+  imageInfo: PropTypes.shape({
+    alt_description: PropTypes.string,
+    urls: PropTypes.shape({
+      small: PropTypes.string,
+    }),
+  }),
+  onClick: PropTypes.func.isRequired,
+};
 
 export default ImageCard;
-//image.urls.regular

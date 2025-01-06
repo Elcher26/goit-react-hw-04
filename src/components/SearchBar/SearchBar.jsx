@@ -1,38 +1,52 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { GoSearch } from 'react-icons/go';
+import toast from 'react-hot-toast';
 import css from './SearchBar.module.css';
-function SearchBar({ searchImages, blankSearchFieldMessage }) {
-  function handleSubmit(e) {
-    e.preventDefault();
 
-    if (e.target.searchData.value === '') {
-      blankSearchFieldMessage();
+const SearchBar = ({ onSubmit }) => {
+  const [query, setQuery] = useState('');
+
+  const handleSubmit = ev => {
+    ev.preventDefault();
+
+    if (query.trim() === '') {
+      toast('Please enter a search term', {
+        duration: 3000,
+      });
       return;
     }
-    searchImages(e.target.searchData.value);
-    setInputValue('');
-  }
+    onSubmit(query.trim());
+    // setQuery('');
+  };
 
-  const [inputValue, setInputValue] = useState('');
   return (
-    <header className={css.header}>
-      <form className={css.form} onSubmit={handleSubmit}>
-        <input
-          className={css.input}
-          type="text"
-          name="searchData"
-          placeholder="Search images and photos"
-          value={inputValue}
-          onChange={e => {
-            setInputValue(e.target.value);
-          }}
-        />
-        <button className={css.btn} type="submit">
-          Search
-        </button>
+    <header className={css.searchBar}>
+      <form onSubmit={handleSubmit} className={css.searchBarForm}>
+        <div className={css.inputWrap}>
+          <GoSearch
+            className={css.searchBarIcon}
+            size={16}
+            onClick={ev => handleSubmit(ev)}
+          />
+          <input
+            type="text"
+            name="query"
+            value={query}
+            onChange={e => setQuery(e.target.value.toLowerCase())}
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            className={css.searchBarInput}
+          />
+        </div>
       </form>
     </header>
   );
-}
+};
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func,
+};
 
 export default SearchBar;

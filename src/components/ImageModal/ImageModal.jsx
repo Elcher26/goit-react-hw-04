@@ -1,31 +1,56 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import { FaTimes } from 'react-icons/fa';
 import css from './ImageModal.module.css';
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    width: '90%',
-    height: '90%',
-  },
-};
-function ImageModal({ closeModal, modalIsOpen, imageModal }) {
+
+Modal.setAppElement('#root');
+
+const ImageModal = ({ isOpen, onClose, image }) => {
+  if (!image) return null;
+
+  const { urls, alt_description, user, likes } = image;
+
   return (
     <Modal
-      isOpen={modalIsOpen}
-      // onAfterOpen={afterOpenModal}
-      onRequestClose={closeModal}
-      style={customStyles}
-      contentLabel="Example Modal"
-      ariaHideApp={false}
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      overlayClassName={css.overlay}
+      className={css.modal}
+      shouldCloseOnOverlayClick={true}
     >
-      <img className={css.img} src={imageModal.url} alt={imageModal.alt} />
+      <div className={css.imageModalContent}>
+        <img
+          src={urls.regular}
+          alt={alt_description || 'Image'}
+          className={css.imageModal}
+        />
+        <div className={css.imageInfo}>
+          <p>
+            <strong>✍️Author:</strong> {user.name}
+          </p>
+          <p>
+            <strong>❤️Likes:</strong> {likes}
+          </p>
+          <p>
+            <strong>📝Description:</strong>{' '}
+            {alt_description || 'No description available'}
+          </p>
+        </div>
+        <button className={css.imageModalCloseBtn} onClick={onClose}>
+          <FaTimes size={24} />
+        </button>
+      </div>
     </Modal>
   );
-}
+};
+
+ImageModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  image: PropTypes.shape({
+    largeImageURL: PropTypes.string,
+    tags: PropTypes.string,
+  }),
+};
 
 export default ImageModal;
